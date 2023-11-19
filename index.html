@@ -1,0 +1,377 @@
+<!DOCTYPE html> <!-- declaration for html5 -->
+<html lang="zh-TW">
+<head>
+        <title>single mode - 直播平台</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+
+        <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+        <script>
+                function update_message_window() {
+
+                        let new_message = document.getElementById("chatBox_input_bar").value;
+                        if(new_message == "") {
+                                window.alert("The input bar is empty");
+
+                        } else {
+                                document.getElementById("message_window").innerHTML +=
+                                "<p>" +
+                                new_message + "<br>" +
+                                "<span style=\"font-size:75%; color:gray\">" +
+                                Date() +
+                                "</span" +
+                                "</p>";
+                                document.getElementById("message_window").scrollTop = document.getElementById("message_window").scrollHeight; // scroll to the bottom
+                        }
+                }
+
+                let mode = 0; // 0: single mode; 1: twin mode; 2: teaching mode;
+                function change_mode() {
+                        switch(mode) {
+                                case 0: { //single mode => change into twin mode.
+                                        document.getElementById("single_cam_mode").style.display = "none";
+                                        document.getElementById("split_cam_mode_1").style.display = "block";
+                                        document.getElementById("split_cam_mode_2").style.display = "block";
+                                        document.getElementById("teaching_mode").style.display = "none";
+                                        mode = 1;
+                                        break;
+                                }
+                                case 1: { //twin mode => change into teaching mode.
+                                        document.getElementById("single_cam_mode").style.display = "block";
+                                        document.getElementById("split_cam_mode_1").style.display = "none";
+                                        document.getElementById("split_cam_mode_2").style.display = "none";
+                                        document.getElementById("teaching_mode").style.display = "block";
+                                        mode = 2;
+                                        break;
+                                }
+                                case 2: { //teaching mode => change into single mode.
+                                        document.getElementById("single_cam_mode").style.display = "block";
+                                        document.getElementById("split_cam_mode_1").style.display = "none";
+                                        document.getElementById("split_cam_mode_2").style.display = "none";
+                                        document.getElementById("teaching_mode").style.display = "none";
+
+                                        mode = 0;
+                                        break;
+                                }
+                                default: { // exception => change into single mode.
+                                        window.alert("change into single mode");
+                                        document.getElementById("single_cam_mode").style.display = "block";
+                                        document.getElementById("split_cam_mode_1").style.display = "none";
+                                        document.getElementById("split_cam_mode_2").style.display = "none";
+                                        document.getElementById("teaching_mode").style.display = "none";
+                                        mode = 0;
+                                        break;
+                                }
+                        }
+                }
+
+                function send_gift(gift) {
+                        alert_message = gift + " sent.";
+                        window.alert(alert_message);
+                }
+
+                // enter full screen mode
+                // refer to:
+                // https://www.w3schools.com/howto/howto_js_fullscreen.asp
+                function open_full_screen() {
+                        if (document.getElementById("cam_mode").requestFullscreen) {
+                                document.getElementById("cam_mode").requestFullscreen();
+                        } else if (document.getElementById("cam_mode").webkitRequestFullscreen) { /* Safari */
+                                        document.getElementById("cam_mode").webkitRequestFullscreen();
+                        } else if (document.getElementById("cam_mode").msRequestFullscreen) { /* IE11 */
+                                        document.getElementById("cam_mode").msRequestFullscreen();
+                        }
+                }
+
+                /* // cannot be used because the video only can be shown when script tab is located under the video tab.
+                var video = document.getElementById('single_cam_mode');
+                var videoSrc = '/hls/single_cam_mode.m3u8'; // 表示要播放的對象是 Streatest`的
+                if (Hls.isSupported()) { // LS
+                        var hls = new Hls();
+                        hls.loadSource(videoSrc);
+                        hls.attachMedia(video);
+                        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                                video.muted = true;
+                                video.play();
+                        });
+                } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                        video.src = videoSrc;
+                }
+
+                var split_cam_mode_1_video = document.getElementById('split_cam_mode_1');
+                var split_cam_mode_1_videoSrc = '/hls/split_cam_mode_1.m3u8'; // 表示要播放的對象是 Streatest`的
+                if (Hls.isSupported()) { // LS
+                        var hls = new Hls();
+                        hls.loadSource(split_cam_mode_1_videoSrc);
+                        hls.attachMedia(split_cam_mode_1_video);
+                        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                                split_cam_mode_1_video.muted = true;
+                                split_cam_mode_1_video.play();
+                        });
+                } else if (split_cam_mode_1_video.canPlayType('application/vnd.apple.mpegurl')) {
+                        split_cam_mode_1_video.src = split_cam_mode_1_videoSrc;
+                }
+
+                var split_cam_mode_2_video = document.getElementById('split_cam_mode_2');
+                var split_cam_mode_2_videoSrc = '/hls/split_cam_mode_2.m3u8'; // 表示要播放的對象是 Streatest`的
+                if (Hls.isSupported()) { // LS
+                        var hls = new Hls();
+                        hls.loadSource(split_cam_mode_2_videoSrc);
+                        hls.attachMedia(split_cam_mode_2_video);
+                        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                                split_cam_mode_2_video.muted = true;
+                                split_cam_mode_2_video.play();
+                        });
+                } else if (split_cam_mode_2_video.canPlayType('application/vnd.apple.mpegurl')) {
+                        split_cam_mode_2_video.src = split_cam_mode_2_videoSrc;
+                }
+
+                var teaching_cam_mode_video = document.getElementById('teaching_cam_mode');
+                var teaching_cam_mode_videoSrc = '/hls/split_cam_mode_2.m3u8'; // 表示要播放的對象是 Streatest`的
+                if (Hls.isSupported()) { // LS
+                        var hls = new Hls();
+                        hls.loadSource(teaching_cam_mode_videoSrc);
+                        hls.attachMedia(teaching_cam_mode_video);
+                        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                                teaching_cam_mode_video.muted = true;
+                                teaching_cam_mode_video.play();
+                        });
+                } else if (teaching_cam_mode_video.canPlayType('application/vnd.apple.mpegurl')) {
+                        teaching_cam_mode_video.src = teaching_cam_mode_videoSrc;
+                }
+                */
+        </script>
+
+        <style>
+                * {
+                        box-sizing: border-box;
+                }
+
+                .cam_video {
+                        width: 100%;
+                        object-fit: fill; /* use "cover" to avoid distortion */
+                }
+
+                .portrait {
+                        position: absolute; /* relative to the normal position: https://www.w3schools.com/css/css_positioning.asp*/
+                        width: 30%;
+                        height: 40%;
+                        left: 70%;
+                        top: 60%;
+                        object-fit: fill; /* use "cover" to avoid distortion */
+                }
+
+                .split_cam {
+                        width: 50%;
+                        object-fit: fill; /* use "cover" to avoid distortion */
+                }
+
+                .total_container {
+                        width: 100%;
+                        height: 100%;
+                        display: flex;
+                        flex-wrap: wrap; /* learn from: https://www.w3schools.com/cssref/tryit.php?filename=trycss3_flex-wrap */
+                }
+
+                .cam {
+                        position: relative;
+                        flex: 70%;
+                        height: 90vh; /* vh usage: https://stackoverflow.com/questions/1622027/percentage-height-html-5-css */
+                        border: 2px solid black;
+                        border-bottom: 1px solid black;
+                        border-right: 1px solid black;
+                        display: flex;
+                        flex-wrap: wrap; /* learn from: https://www.w3schools.com/cssref/tryit.php?filename=trycss3_flex-wrap */
+                }
+
+                .chatBox {
+                        flex: 30%;
+                        height: 90vh;
+                        border: 2px solid black;
+                        border-bottom: 1px solid black;
+                        border-left: 1px solid black;
+                        overflow: auto;
+                        position: relative;
+                }
+
+                .chatBox_message {
+                        position: absolute;
+                        left: 0%;
+                        top: 0%;
+                        width: 100%
+                        height: 90%;
+                        max-height: 90%;
+                        min-width: 100%;
+                        overflow: auto;
+                        /* vertical-align: top; */
+
+                }
+
+                .chatBox_input {
+                        position: sticky;
+                        left: 0%;
+                        top: 90%;
+                        width: 100%;
+                        height: 10%;
+                        border: 1px solid blue;
+                        /* vertical-align: bottom; */
+                }
+
+                .setting_bar_left {
+                        flex: 35%;
+                        border: 2px solid black;
+                        border-right: 0px solid black;
+                        display: flex;
+                }
+
+                .setting_bar_right {
+                        flex: 35%;
+                        border: 2px solid black;
+                        border-left: 0px solid black;
+                        display: flex;
+                        flex-direction: row-reverse;
+                }
+
+                .donate {
+                        flex: 30%;
+                        border: 2px solid black;
+                }
+
+                input[type=range] {
+                        accent-color: rgb(0, 0, 0);
+                }
+
+                <!-- CSS selector: https://www.w3schools.com/cssref/css_selectors.php -->
+                div.setting_bar_left img {
+                        margin: 1%;
+                        height: 70%;
+                }
+
+                div.setting_bar_right img {
+                        margin: 1%;
+                        height: 70%;
+                }
+
+                div.donate button {
+                        margin: 1%;
+                        margin-left: auto;
+                        margin-right: auto;
+                        height: 70%;
+                }
+
+                .imageButton {
+                        border:0.5px solid black;
+                        background-color:rgba(0, 0, 0, 0.5);
+                        margin-top:1%;
+                        margin-bottom:1%;
+                        height: 70%;
+                        display:inline-block; /* make multiple blocks be displayed in the same line */
+                }
+
+        </style>
+
+</head>
+<body>
+
+        <div class="total_container">
+                <div class="cam" id="cam_mode">
+                <video autoplay muted loop class="cam_video" id="single_cam_mode" style="display:block"></video>
+                <script>
+                        var video = document.getElementById('single_cam_mode');
+                        var videoSrc = '/hls/single_cam_mode.m3u8'; // 表示要播放的對象是 Streatest`的
+                        if (Hls.isSupported()) { // LS
+                                var hls = new Hls();
+                                hls.loadSource(videoSrc);
+                                hls.attachMedia(video);
+                                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                                        video.muted = true;
+                                        video.play();
+                                });
+                        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                                video.src = videoSrc;
+                        }
+                </script>
+
+                 <video autoplay muted loop class='split_cam' id='split_cam_mode_1' style="display:none"></video>
+                 <script style="display:none"> var video_l = document.getElementById('split_cam_mode_1');
+                         var videoSrc_l = '/hls/split_cam_mode_1.m3u8';
+                        if (Hls.isSupported()) {
+                                var hls = new Hls();
+                                hls.loadSource(videoSrc_l);
+                                hls.attachMedia(video_l);
+                                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                                        video_l.muted = true;
+                                        video_l.play();
+                                });
+                        } else if (video_l.canPlayType('application/vnd.apple.mpegurl')) {
+                                video_l.src = videoSrc_l;
+                        }
+                </script>
+                <video autoplay muted loop class='split_cam' id='split_cam_mode_2' style="display:none"></video>
+                <script>
+                        var video_r = document.getElementById('split_cam_mode_2');
+                        var videoSrc_r = '/hls/split_cam_mode_2.m3u8';
+                        if (Hls.isSupported()) {
+                                var hls = new Hls();
+                                hls.loadSource(videoSrc_r);
+                                hls.attachMedia(video_r);
+                                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                                        video_r.muted = true;
+                                        video_r.play();
+                                });
+                        } else if (video_r.canPlayType('application/vnd.apple.mpegurl')) {
+                                video_r.src = videoSrc_r;
+                        }
+                </script>
+
+                <video autoplay muted loop class='portrait' id='teaching_mode' style="display:none"></video>
+                <script>
+                        var video_r = document.getElementById('teaching_mode');
+                        var videoSrc_r = '/hls/teaching_mode.m3u8';
+                        if (Hls.isSupported()) {
+                                var hls = new Hls();
+                                hls.loadSource(videoSrc_r);
+                                hls.attachMedia(video_r);
+                                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                                        video_r.muted = true;
+                                        video_r.play();
+                                });
+                        } else if (video_r.canPlayType('application/vnd.apple.mpegurl')) {
+                                video_r.src = videoSrc_r;
+                        }
+                </script>
+                </div>
+                <!-- slide bar: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_sidenav_push -->
+                <div class="chatBox">
+                        <div class=chatBox_message id="message_window">
+                        </div>
+                        <div class=chatBox_input>
+                                Write something:<br>
+                                <input id="chatBox_input_bar">
+                                <button type="button" onclick="update_message_window()">send</button>
+                        </div>
+                </div>
+
+                <div class="setting_bar_left">
+                        <!-- refer to: https://www.w3schools.com/cssref/tryit.php?filename=trycss4_accent-color -->
+                        <label for="vol"><img src="speaker icon.png" alt="speaker icon"></label>
+                        <input type="range" id="vol" name="vol" min="0" max="50">
+                </div>
+                <div class="setting_bar_right">
+                        <button onclick="open_full_screen();"><img src="full screen.png" alt="full screen icon"></button>
+                        <button type="button" onclick="change_mode()"><img src="settings.png" alt="settings icon"></button>
+                </div>
+
+                <div class="donate">
+                        <div style="display:flex;">
+                        <button type="button" onclick="send_gift('money bag')"><img src="money bag.png" alt="money bag"></button>
+                        <button type="button" onclick="send_gift('flower bundle')"><img src="flower bundle.png" alt="flower bundle"></button>
+                        <button type="button" onclick="send_gift('gift')"><img src="gift.png" alt="gift" class="center"></button>
+                        </div>
+                </div>
+
+        </div>
+
+</body>
+</html>
+
