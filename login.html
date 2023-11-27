@@ -45,9 +45,16 @@
                                 }
 
                                 document.getElementById("request_sent").innerHTML = "\"" + sent_content +"\"";
+                                window.alert("Login success.\nRedirect to the streamming page after 3 sec since you click \"OK\".");
+                                redirect_delay = setTimeout(redirect_to_streamming, 3000);
                                 //xhttp.sent(sent_content);
                         }
 
+                }
+
+                function redirect_to_streamming() {
+                        window.location.href = "http://52.186.182.219/";
+                        return;
                 }
         </script>
 
