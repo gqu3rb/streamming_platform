@@ -1,48 +1,85 @@
 <!DOCTYPE html> <!-- declaration for html5 -->
 <html lang="zh-TW">
 <head>
-        <title>直播平台 - login</title>
+        <title>login - 直播平台</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
 
+        <script>
+                function login_action() {
+                        // refer to: Reduce DOM Access
+                        // https://www.w3schools.com/js/js_performance.asp
+                        const user_name_input_DOM = document.getElementById("user_name_input");
+                        const user_room_input_DOM = document.getElementById("user_room_input");
+
+                        if(user_name_input_DOM.value == "") {
+                                window.alert("user name cannot remain empty.");
+
+                        } else {
+                                // send the post request
+                                const xhttp = new XMLHttpRequest();
+                                //xhttp.open("POST", "http://52.186.182.219:5000/add_ta", true);
+
+                                // construct the post content
+                                let sent_content = "user_name=";
+                                sent_content += user_name_input_DOM.value;
+                                sent_content += "&user_room=";
+                                if(user_room_input_DOM.value == "") { // create a new room
+                                        for(let i=0; i<8; i++) {
+                                                sent_content += String.fromCharCode(Math.random()*(26) + 97);
+                                        }
+                                }else{
+                                        if(user_room_input_DOM.value.length != 8) {
+                                                window.alert("the length of the room code should be 8");
+                                                return;
+                                        }
+                                        for(let i=0; i<8; i++) {
+                                                if(user_room_input_DOM.value.charCodeAt(i) < 97 || user_room_input_DOM.value.charCodeAt(i) > 122) {
+                                                        window.alert("input room should only include lowercase alphabet");
+
+                                                        return;
+                                                } else {
+                                                        sent_content += user_room_input_DOM.value.at(i);
+                                                }
+                                        }
+                                }
+
+                                document.getElementById("request_sent").innerHTML = "\"" + sent_content +"\"";
+                                //xhttp.sent(sent_content);
+                        }
+
+                }
+        </script>
+
         <style>
+                * {
+                        box-sizing: border-box;
+                }
 
                 .total_container {
                         display: flex;
                         justify-content: center;
                         align-items: center;
-                        height: 100vh;
+                        height: 90vh;
                         width: 100%;
                 }
 
                 .login {
-                        display: flex;
-                        justify-content: center;
-                        width: 300px;
                         height: 30%;
                         border: 1px solid black;
                 }
 
-                .
-                .login_form {
-                }
-
-                .login_form button {
+                .heading {
                         width: 100%;
                 }
-
-                .login_form label {
+                .
+                .login label {
                 }
 
-                .login_form input {
+                .login input {
                         width: 100%;
                         margin: 0px 0px 10px 0px;
                 }
-
-                .button {
-
-                }
-
 
         </style>
 
@@ -51,20 +88,23 @@
 
         <div class="total_container">
                 <div class="login">
-                        <form class="login_form">
-                                <h3>登入</h3>
-                                <div>
-                                        <label for="user_name">名稱 </label>
-                                        <input type="text" class="user_input" required>
-                                </div>
-                                <div>
-                                        <label for="user_room">房間(留白將創立新房間) </label>
-                                        <input type="text" class="user_input">
-                                </div>
-                                <br>
-                                <button type="submit" class="button">登入</button>
-                        </form>
+                        <div class="heading"><h3>登入</h3></div>
+                        <div>
+                                <label for="user_name">名稱 </label>
+                                <input type="text" class="user_input" id="user_name_input" required>
+                        </div>
+                        <div>
+                                <label for="user_room">房間(留白將創立新房間) </label>
+                                <input type="text" class="user_input" id="user_room_input" >
+                        </div>
+                        <br>
+                        <button type="button" class="login_button" onclick="login_action()">登入</button>
                 </div>
+
+        </div>
+        <div>
+                <p>POST request content:</p>
+                <div id="request_sent"></div>
         </div>
 
 </body>
