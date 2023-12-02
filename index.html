@@ -90,6 +90,20 @@
                         }
                 }
 
+                function exit() {
+                        if(confirm("Do you want to leave the room?")) {
+                        }
+                }
+
+                // execute if the valume of the slide bar is changed.
+                // refer to: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_js_rangeslider
+                vol.oninput = function() {
+                        single_cam_mode.volume = this.value/100;
+                        split_cam_mode_1 = this.value/100;
+                        split_cam_mode_2 = this.value/100;
+                        teaching_mode = this.value/100;
+                }
+
                 /* // cannot be used because the video only can be shown when script tab is located under the video tab.
                 var video = document.getElementById('single_cam_mode');
                 var videoSrc = '/hls/single_cam_mode.m3u8'; // 表示要播放的對象是 Streatest`的
@@ -363,11 +377,12 @@
                 <div class="setting_bar_left">
                         <!-- refer to: https://www.w3schools.com/cssref/tryit.php?filename=trycss4_accent-color -->
                         <label for="vol"><img src="speaker icon.png" alt="speaker icon"></label>
-                        <input type="range" id="vol" name="vol" min="0" max="50">
+                        <input type="range" id="vol" name="vol" min="0" value="100" max="100">
                 </div>
                 <div class="setting_bar_right">
                         <button onclick="open_full_screen();"><img src="full screen.png" alt="full screen icon"></button>
                         <button type="button" onclick="change_mode()"><img src="settings.png" alt="settings icon"></button>
+                        <button type="button" onclick="exit()"><img src="exit.png" alt="exit.png" ></button>
                 </div>
 
                 <div class="donate">
