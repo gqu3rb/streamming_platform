@@ -7,23 +7,30 @@
 
         <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
         <script>
-                function update_message_window() {
 
-                        let new_message = document.getElementById("chatBox_input_bar").value;
+                // getElementById cannot be used in the global field
+                // const message_window_DOM = document.getElementById("message_window");
+                function update_message_window() {
+                        const message_window_DOM = document.getElementById("message_window");
+
+                        const new_message = document.getElementById("chatBox_input_bar").value;
                         if(new_message == "") {
                                 window.alert("The input bar is empty");
 
                         } else {
-                                document.getElementById("message_window").innerHTML +=
+                                message_window_DOM.innerHTML +=
                                 "<p>" +
                                 new_message + "<br>" +
                                 "<span style=\"font-size:75%; color:gray\">" +
                                 Date() +
                                 "</span" +
                                 "</p>";
-                                document.getElementById("message_window").scrollTop = document.getElementById("message_window").scrollHeight; // scroll to the bottom
+                                message_window_DOM.scrollTop = document.getElementById("message_window").scrollHeight; // scroll to the bottom
+                                document.getElementById("chatBox_input_bar").value = "";
                         }
                 }
+
+
 
                 let mode = 0; // 0: single mode; 1: twin mode; 2: teaching mode;
                 function change_mode() {
@@ -213,7 +220,8 @@
                         top: 90%;
                         width: 100%;
                         height: 10%;
-                        border: 1px solid blue;
+                        overflow: auto;
+                        border: 1px solid black;
                         /* vertical-align: bottom; */
                 }
 
@@ -347,7 +355,7 @@
                         </div>
                         <div class=chatBox_input>
                                 Write something:<br>
-                                <input id="chatBox_input_bar">
+                                <input id="chatBox_input_bar", style="width:100%; line-height:1.5;">
                                 <button type="button" onclick="update_message_window()">send</button>
                         </div>
                 </div>
