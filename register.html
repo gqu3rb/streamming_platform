@@ -1,0 +1,118 @@
+<!DOCTYPE html> <!-- declaration for html5 -->
+<html lang="zh-TW">
+<head>
+        <title>register - 直播平台</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+
+        <script>
+                function register_action() {
+                        // refer to: Reduce DOM Access
+                        // https://www.w3schools.com/js/js_performance.asp
+                        const user_name_input_DOM = document.getElementById("user_name_input");
+                        const user_email_input_DOM = document.getElementById("user_email_input");
+                        const user_password_input_DOM = document.getElementById("user_password_input");
+
+                        if(user_name_input_DOM.value == "") {
+                                window.alert("user name cannot remain empty.");
+
+                        } else if(user_password_input_DOM.value == "") {
+                                window.alert("user password cannot remain empty.");
+
+                        } else if(user_email_input_DOM.value.search("@") == -1) {
+                                window.alert("email should contain \'@\'");
+
+                        } else {
+                                // send the post request
+                                const xhttp = new XMLHttpRequest();
+                                xhttp.open("POST", "http://52.186.182.219:5000/register", true);
+                                xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                                //xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
+                                //xhttp.setRequestHeader("Access-Control-Request", "POST");
+
+                                // construct the post content
+                                let sent_content = "user_name=";
+                                sent_content += user_name_input_DOM.value;
+                                sent_content += "&Email=";
+                                sent_content += user_email_input_DOM.value;
+                                sent_content += "&Password=";
+                                sent_content += user_password_input_DOM.value;
+
+                                xhttp.send(sent_content);
+                                document.getElementById("request_sent").innerHTML = "\"" + sent_content +"\"";
+
+                                xhttp.onload = function() {
+                                        window.alert("Register success.\nRedirect to the login page after 3 sec since you click \"OK\".");
+                                        redirect_delay = setTimeout(redirect_to_login, 3000);
+                                }
+                        }
+
+                }
+
+                function redirect_to_login() {
+                        window.location.href = "http://52.186.182.219/login.html";
+                        return;
+                }
+        </script>
+
+        <style>
+                * {
+                        box-sizing: border-box;
+                }
+
+                .total_container {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 90vh;
+                        width: 100%;
+                }
+
+                .login {
+                        height: 40%;
+                        border: 1px solid black;
+                }
+
+                .heading {
+                        width: 100%;
+                }
+                .
+                .login label {
+                }
+
+                .login input {
+                        width: 100%;
+                        margin: 0px 0px 10px 0px;
+                }
+
+        </style>
+
+</head>
+<body>
+
+        <div class="total_container">
+                <div class="login">
+                        <div class="heading"><h3>註冊</h3></div>
+                        <div>
+                                <label for="user_name">名稱 </label>
+                                <input type="text" class="user_input" id="user_name_input" required>
+                        </div>
+                        <div>
+                                <label for="user_email">email</label>
+                                <input type="text" class="user_input" id="user_email_input" >
+                        </div>
+                        <div>
+                                <label for="user_password">password</label>
+                                <input type="password" class="user_input" id="user_password_input" >
+                        </div>
+                        <br>
+                        <button type="button" class="login_button" onclick="register_action()">註冊</button>
+                </div>
+
+        </div>
+        <div>
+                <p>POST request content:</p>
+                <div id="request_sent"></div>
+        </div>
+
+</body>
