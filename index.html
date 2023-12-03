@@ -7,6 +7,10 @@
 
         <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
         <script>
+
+                let chat_room_code;
+                let user_name_code;
+
                 function login_action() {
                         // refer to: Reduce DOM Access
                         // https://www.w3schools.com/js/js_performance.asp
@@ -21,17 +25,17 @@
                                 window.alert("user password cannot remain empty.");
 
                         } else {
-                                let sent_room;
+                                let sent_room = "";
                                 if(user_room_input_DOM.value == "") { // create a new room
                                         for(let i=0; i<8; i++) {
                                                 sent_room += String.fromCharCode(Math.random()*(26) + 97);
                                         }
                                 }else{
-                                        if(user_room_input_DOM.value.length != 8) {
-                                                window.alert("the length of the room code should be 8");
-                                                return;
-                                        }
                                         for(let i=0; i<8; i++) {
+                                                if(user_room_input_DOM.value.length != 8) {
+                                                        window.alert("the length of the room code should be 8");
+                                                        return;
+                                                }
                                                 if(user_room_input_DOM.value.charCodeAt(i) < 97 || user_room_input_DOM.value.charCodeAt(i) > 122) {
                                                         window.alert("input room should only include lowercase alphabet");
 
@@ -42,10 +46,7 @@
                                         }
                                 }
 
-                                //xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
-                                //xhttp.setRequestHeader("Access-Control-Request", "POST");
-
-                                // construct the post content
+                                // construct the get request content
                                 let sent_content = "http://52.186.182.219:5000/signin?";
                                 sent_content += "user_name=";
                                 sent_content += user_name_input_DOM.value;
@@ -61,6 +62,8 @@
                                 xhttp.onload = function() {
                                         if(xhttp.responseText == "Sign in successfully") {
                                                 window.alert("Login success.\nRedirect to the streamming page after 3 sec since you click \"OK\".");
+                                                chat_room_code = sent_room;
+                                                user_name_code = user_name_input_DOM.value;
                                                 redirect_delay = setTimeout(redirect_to_streamming, 3000);
                                         } else {
                                                 window.alert("Login failed.");
@@ -81,7 +84,7 @@
                         const message_window_DOM = document.getElementById("message_window");
 
                         const xhttp = new XMLHttpRequest();
-                        xhttp.open("GET", "http://52.186.182.219:5000/get_user", true);
+                        xhttp.open("GET", "http://52.186.182.219:5000/get_user?", true);
                         xhttp.send();
                         xhttp.onload = function() {
 
@@ -93,28 +96,35 @@
                                         "</span" +
                                         "</p>";
                                 message_window_DOM.scrollTop = document.getElementById("message_window").scrollHeight; // scroll to the bottom
-                                redirect_delay = setTimeout(update_message_window, 100);
+                                //redirect_delay = setTimeout(update_message_window, 100);
                         }
                 }
 
                 // getElementById cannot be used in the global field
                 // const message_window_DOM = document.getElementById("message_window");
                 function send_message() {
+                        const new_message = document.getElementById("chatBox_input_bar").value;
+
+                        if(new_message == "") {
+                                window.alert("The input bar is empty");
+                                return;
+                        }
+
                         const xhttp = new XMLHttpRequest();
                         xhttp.open("POST", "http://52.186.182.219:5000/add_chat", true);
                         xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                        const message_window_DOM = document.getElementById("message_window");
-
-                        const new_message = document.getElementById("chatBox_input_bar").value;
-                        if(new_message == "") {
-                                window.alert("The input bar is empty");
-
-                        } else {
+                        let request_content = "user_name=";
+                        request_content += user_name_code;
+                        request_content += "&user_room=";
+                        request_content += chat_room_code;
+                        request_content += "&Chat=";
+                        request_content += new_message;
+                        xhttp.send(request_content);
+                        xhttp.onload = function() {
                                 document.getElementById("chatBox_input_bar").value = "";
                                 update_message_window();
                         }
                 }
-
 
 
                 let mode = 0; // 0: single mode; 1: twin mode; 2: teaching mode;
@@ -158,8 +168,30 @@
                 }
 
                 function send_gift(gift) {
-                        alert_message = gift + " sent.";
-                        window.alert(alert_message);
+                        const xhttp = new XMLHttpRequest();
+                        xhttp.open("POST", "http://52.186.182.219:5000/add_donate", true);
+                        xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                        let request_content = "user_name=";
+                        request_content += user_name_code;
+                        request_content += "&user_room=";
+                        request_content += chat_room_code;
+                        request_content += "&Money=";
+                        if(gift == "money bag") {
+                                request_content += "100";
+                        } else if(gift == "flower bundle") {
+                                request_content += "50";
+                        } else if(gift == "gift") {
+                                request_content += "20";
+                        } else {
+                                request_content += "0";
+                        }
+
+                        window.alert(request_content);
+                        xhttp.send(request_content);
+                        xhttp.onload = function() {
+                                alert_message = gift + " sent.";
+                                window.alert(alert_message);
+                        }
                 }
 
                 // enter full screen mode
@@ -341,6 +373,28 @@
 </head>
 <body>
 
+        <div class="total_container_login" id="total_container_login_id"  style="display:flex">
+                <div class="login">
+                        <div class="heading"><h3>登入</h3></div>
+                        <div>
+                                <label for="user_name">名稱</label>
+                                <input type="text" class="user_input" id="user_name_input" required style="width: 100%; margin: 0px 0px 10px 0px;">
+                        </div>
+                        <div>
+                                <label for="user_password">password</label>
+                                <input type="password" class="user_input" id="user_password_input" style="width: 100%; margin: 0px 0px 10px 0px;">
+                        </div>
+                        <div>
+                                <label for="user_room">房間(留白將創立新房間)</label>
+                                <input type="text" class="user_input" id="user_room_input" style="width: 100%; margin: 0px 0px 10px 0px;">
+                        </div>
+                        <br>
+                        <button type="button" class="login_button" onclick="login_action()">登入</button>
+                        <a href="http://52.186.182.219/register.html">創建帳號</a>
+                </div>
+
+        </div>
+
         <div class="total_container_streamming" id="total_container_streamming_id" style="display:none">
                 <div class="cam" id="cam_mode">
                 <video autoplay loop class="cam_video" id="single_cam_mode" style="display:block"></video>
@@ -437,28 +491,6 @@
                         <button type="button" onclick="send_gift('flower bundle')"><img src="flower bundle.png" alt="flower bundle"></button>
                         <button type="button" onclick="send_gift('gift')"><img src="gift.png" alt="gift" class="center"></button>
                         </div>
-                </div>
-
-        </div>
-
-        <div class="total_container_login" id="total_container_login_id"  style="display:flex">
-                <div class="login">
-                        <div class="heading"><h3>登入</h3></div>
-                        <div>
-                                <label for="user_name">名稱</label>
-                                <input type="text" class="user_input" id="user_name_input" required style="width: 100%; margin: 0px 0px 10px 0px;">
-                        </div>
-                        <div>
-                                <label for="user_password">password</label>
-                                <input type="password" class="user_input" id="user_password_input" style="width: 100%; margin: 0px 0px 10px 0px;">
-                        </div>
-                        <div>
-                                <label for="user_room">房間(留白將創立新房間)</label>
-                                <input type="text" class="user_input" id="user_room_input" style="width: 100%; margin: 0px 0px 10px 0px;">
-                        </div>
-                        <br>
-                        <button type="button" class="login_button" onclick="login_action()">登入</button>
-                        <a href="http://52.186.182.219/register.html">創建帳號</a>
                 </div>
 
         </div>
