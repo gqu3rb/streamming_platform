@@ -81,14 +81,14 @@
                         return;
                 }
 
-                let last_message_update_time;
+                //let last_message_update_time;
                 function update_message_window() {
                         const message_window_DOM = document.getElementById("message_window");
 
                         let request_content = "http://52.186.182.219:5000/get_chat?user_room="
                         request_content += chat_room_code;
-                        request_content += "&past_time=";
-                        request_content += last_message_update_time;
+                        //request_content += "&past_time=";
+                        //request_content += last_message_update_time;
                         const xhttp = new XMLHttpRequest();
                         xhttp.open("GET", request_content, true);
                         xhttp.send();
@@ -115,18 +115,18 @@
                                         message_window_DOM.scrollTop = document.getElementById("message_window").scrollHeight; // scroll to the bottom
                                 }
 
-                                let now_time = new Date();
-                                last_message_update_time = now_time.getFullYear();
-                                last_message_update_time += "-";
-                                last_message_update_time += now_time.getMonth();
-                                last_message_update_time += "-";
-                                last_message_update_time += now_time.getDate();
-                                last_message_update_time += " ";
-                                last_message_update_time += now_time.getHours();
-                                last_message_update_time += ":";
-                                last_message_update_time += now_time.getMinutes();
-                                last_message_update_time += ":";
-                                last_message_update_time += now_time.getSeconds();
+                                //let now_time = new Date();
+                                //last_message_update_time = now_time.getFullYear();
+                                //last_message_update_time += "-";
+                                //last_message_update_time += now_time.getMonth();
+                                //last_message_update_time += "-";
+                                //last_message_update_time += now_time.getDate();
+                                //last_message_update_time += " ";
+                                //last_message_update_time += now_time.getHours();
+                                //last_message_update_time += ":";
+                                //last_message_update_time += now_time.getMinutes();
+                                //last_message_update_time += ":";
+                                //last_message_update_time += now_time.getSeconds();
 
                                 update_message_delay = setTimeout(update_message_window, 1000);
                         }
