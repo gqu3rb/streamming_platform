@@ -7,28 +7,103 @@
 
         <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
         <script>
-		function update_message_window() {
+                function login_action() {
+                        // refer to: Reduce DOM Access
+                        // https://www.w3schools.com/js/js_performance.asp
+                        const user_name_input_DOM = document.getElementById("user_name_input");
+                        const user_password_input_DOM = document.getElementById("user_password_input");
+                        const user_room_input_DOM = document.getElementById("user_room_input");
+
+                        if(user_name_input_DOM.value == "") {
+                                window.alert("user name cannot remain empty.");
+
+                        } else if(user_password_input_DOM.value == "") {
+                                window.alert("user password cannot remain empty.");
+
+                        } else {
+                                let sent_room;
+                                if(user_room_input_DOM.value == "") { // create a new room
+                                        for(let i=0; i<8; i++) {
+                                                sent_room += String.fromCharCode(Math.random()*(26) + 97);
+                                        }
+                                }else{
+                                        if(user_room_input_DOM.value.length != 8) {
+                                                window.alert("the length of the room code should be 8");
+                                                return;
+                                        }
+                                        for(let i=0; i<8; i++) {
+                                                if(user_room_input_DOM.value.charCodeAt(i) < 97 || user_room_input_DOM.value.charCodeAt(i) > 122) {
+                                                        window.alert("input room should only include lowercase alphabet");
+
+                                                        return;
+                                                } else {
+                                                        sent_room += user_room_input_DOM.value.at(i);
+                                                }
+                                        }
+                                }
+
+                                //xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
+                                //xhttp.setRequestHeader("Access-Control-Request", "POST");
+
+                                // construct the post content
+                                let sent_content = "http://52.186.182.219:5000/signin?";
+                                sent_content += "user_name=";
+                                sent_content += user_name_input_DOM.value;
+                                sent_content += "&Password=";
+                                sent_content += user_password_input_DOM.value;
+                                sent_content += "&user_room=";
+                                sent_content += sent_room;
+
+                                // send the get request
+                                const xhttp = new XMLHttpRequest();
+                                xhttp.open("GET", sent_content);
+                                xhttp.send();
+                                document.getElementById("request_sent").innerHTML = "\"" + sent_content +"\"";
+                                xhttp.onload = function() {
+                                        if(xhttp.responseText == "Sign in successfully") {
+                                                window.alert("Login success.\nRedirect to the streamming page after 3 sec since you click \"OK\".");
+                                                redirect_delay = setTimeout(redirect_to_streamming, 3000);
+                                        } else {
+                                                window.alert("Login failed.");
+                                                location.reload();
+                                        }
+
+                                }
+                        }
+                }
+
+                function redirect_to_streamming() {
+                        document.getElementById("total_container_login").style.display = "none";
+                        document.getElementById("total_container_streamming").style.display = "flex";
+                        return;
+                }
+
+                function update_message_window() {
                         const message_window_DOM = document.getElementById("message_window");
 
-			const xhttp = new XMLHttpRequest();
-			xhttp.open("GET", "http://52.186.182.219:5000/get_user", true);
-			xhttp.send();
-			xhttp.onload = function() {
-			
-				message_window_DOM.innerHTML +=
-					"<p>" +
-					xhttp.responseText + "<br>" +
-					"<span style=\"font-size:75%; color:gray\">" +
-					Date() +
-					"</span" +
-					"</p>";
-				message_window_DOM.scrollTop = document.getElementById("message_window").scrollHeight; // scroll to the bottom
-			}
-		}
+                        const xhttp = new XMLHttpRequest();
+                        xhttp.open("GET", "http://52.186.182.219:5000/get_user", true);
+                        xhttp.send();
+                        xhttp.onload = function() {
+
+                                message_window_DOM.innerHTML +=
+                                        "<p>" +
+                                        xhttp.responseText + "<br>" +
+                                        "<span style=\"font-size:75%; color:gray\">" +
+                                        Date() +
+                                        "</span" +
+                                        "</p>";
+                                message_window_DOM.scrollTop = document.getElementById("message_window").scrollHeight; // scroll to the bottom
+                                redirect_delay = setTimeout(update_message_window, 100);
+                        }
+                }
 
                 // getElementById cannot be used in the global field
                 // const message_window_DOM = document.getElementById("message_window");
                 function send_message() {
+                        const xhttp = new XMLHttpRequest();
+                        xhttp.open("POST", "http://52.186.182.219:5000/add_chat", true);
+                        xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
                         const message_window_DOM = document.getElementById("message_window");
 
                         const new_message = document.getElementById("chatBox_input_bar").value;
@@ -37,7 +112,7 @@
 
                         } else {
                                 document.getElementById("chatBox_input_bar").value = "";
-				update_message_window();
+                                update_message_window();
                         }
                 }
 
@@ -103,6 +178,7 @@
 
                 function exit() {
                         if(confirm("Do you want to leave the room?")) {
+                                window.close();
                         }
                 }
 
@@ -115,68 +191,28 @@
                         teaching_mode = this.value/100;
                 }
 
-                /* // cannot be used because the video only can be shown when script tab is located under the video tab.
-                var video = document.getElementById('single_cam_mode');
-                var videoSrc = '/hls/single_cam_mode.m3u8'; // 表示要播放的對象是 Streatest`的
-                if (Hls.isSupported()) { // LS
-                        var hls = new Hls();
-                        hls.loadSource(videoSrc);
-                        hls.attachMedia(video);
-                        hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                                video.muted = true;
-                                video.play();
-                        });
-                } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                        video.src = videoSrc;
-                }
-
-                var split_cam_mode_1_video = document.getElementById('split_cam_mode_1');
-                var split_cam_mode_1_videoSrc = '/hls/split_cam_mode_1.m3u8'; // 表示要播放的對象是 Streatest`的
-                if (Hls.isSupported()) { // LS
-                        var hls = new Hls();
-                        hls.loadSource(split_cam_mode_1_videoSrc);
-                        hls.attachMedia(split_cam_mode_1_video);
-                        hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                                split_cam_mode_1_video.muted = true;
-                                split_cam_mode_1_video.play();
-                        });
-                } else if (split_cam_mode_1_video.canPlayType('application/vnd.apple.mpegurl')) {
-                        split_cam_mode_1_video.src = split_cam_mode_1_videoSrc;
-                }
-
-                var split_cam_mode_2_video = document.getElementById('split_cam_mode_2');
-                var split_cam_mode_2_videoSrc = '/hls/split_cam_mode_2.m3u8'; // 表示要播放的對象是 Streatest`的
-                if (Hls.isSupported()) { // LS
-                        var hls = new Hls();
-                        hls.loadSource(split_cam_mode_2_videoSrc);
-                        hls.attachMedia(split_cam_mode_2_video);
-                        hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                                split_cam_mode_2_video.muted = true;
-                                split_cam_mode_2_video.play();
-                        });
-                } else if (split_cam_mode_2_video.canPlayType('application/vnd.apple.mpegurl')) {
-                        split_cam_mode_2_video.src = split_cam_mode_2_videoSrc;
-                }
-
-                var teaching_cam_mode_video = document.getElementById('teaching_cam_mode');
-                var teaching_cam_mode_videoSrc = '/hls/split_cam_mode_2.m3u8'; // 表示要播放的對象是 Streatest`的
-                if (Hls.isSupported()) { // LS
-                        var hls = new Hls();
-                        hls.loadSource(teaching_cam_mode_videoSrc);
-                        hls.attachMedia(teaching_cam_mode_video);
-                        hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                                teaching_cam_mode_video.muted = true;
-                                teaching_cam_mode_video.play();
-                        });
-                } else if (teaching_cam_mode_video.canPlayType('application/vnd.apple.mpegurl')) {
-                        teaching_cam_mode_video.src = teaching_cam_mode_videoSrc;
-                }
-                */
         </script>
 
         <style>
                 * {
                         box-sizing: border-box;
+                }
+
+                .total_container_login {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 90vh;
+                        width: 100%;
+                }
+
+                .login {
+                        height: 35%;
+                        border: 1px solid black;
+                }
+
+                .heading {
+                        width: 100%;
                 }
 
                 .cam_video {
@@ -198,7 +234,7 @@
                         object-fit: fill; /* use "cover" to avoid distortion */
                 }
 
-                .total_container {
+                .total_container_streamming {
                         width: 100%;
                         height: 100%;
                         display: flex;
@@ -306,7 +342,7 @@
 </head>
 <body>
 
-        <div class="total_container">
+        <div class="total_container_streamming" style="display:none">
                 <div class="cam" id="cam_mode">
                 <video autoplay loop class="cam_video" id="single_cam_mode" style="display:block"></video>
                 <script>
@@ -405,6 +441,29 @@
                 </div>
 
         </div>
+
+        <div class="total_container_login" style="display:flex">
+                <div class="login">
+                        <div class="heading"><h3>登入</h3></div>
+                        <div>
+                                <label for="user_name">名稱</label>
+                                <input type="text" class="user_input" id="user_name_input" required style="width: 100%; margin: 0px 0px 10px 0px;">
+                        </div>
+                        <div>
+                                <label for="user_password">password</label>
+                                <input type="password" class="user_input" id="user_password_input" style="width: 100%; margin: 0px 0px 10px 0px;">
+                        </div>
+                        <div>
+                                <label for="user_room">房間(留白將創立新房間)</label>
+                                <input type="text" class="user_input" id="user_room_input" style="width: 100%; margin: 0px 0px 10px 0px;">
+                        </div>
+                        <br>
+                        <button type="button" class="login_button" onclick="login_action()">登入</button>
+                        <a href="http://52.186.182.219/register.html">創建帳號</a>
+                </div>
+
+        </div>
+
 
 </body>
 </html>
