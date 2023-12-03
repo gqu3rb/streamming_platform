@@ -39,8 +39,6 @@
                                 sent_content += user_password_input_DOM.value;
 
                                 xhttp.send(sent_content);
-                                document.getElementById("request_sent").innerHTML = "\"" + sent_content +"\"";
-
                                 xhttp.onload = function() {
                                         window.alert("Register success.\nRedirect to the login page after 3 sec since you click \"OK\".");
                                         redirect_delay = setTimeout(redirect_to_login, 3000);
@@ -109,10 +107,6 @@
                         <button type="button" class="login_button" onclick="register_action()">註冊</button>
                 </div>
 
-        </div>
-        <div>
-                <p>POST request content:</p>
-                <div id="request_sent"></div>
         </div>
 
 </body>
