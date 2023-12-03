@@ -1,9 +1,37 @@
 <!DOCTYPE html> <!-- declaration for html5 -->
 <html lang="zh-TW">
+<html>
 <head>
-        <title>single mode - 直播平台</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+<script>
+                let last_message_update_time = "";
+                function update_message_window() {
+
+                    let now_time = new Date();
+                    last_message_update_time = now_time.getFullYear();
+                    last_message_update_time += "-";
+                    last_message_update_time += now_time.getMonth();
+                    last_message_update_time += "-";
+                    last_message_update_time += now_time.getDate();
+                    last_message_update_time += " ";
+                    last_message_update_time += now_time.getHours();
+                    last_message_update_time += ":";
+                    last_message_update_time += now_time.getMinutes();
+                    last_message_update_time += ":";
+                    last_message_update_time += now_time.getSeconds();
+                    document.getElementById("aaa").innerHTML = last_message_update_time;
+
+                    update_message_delay = setTimeout(update_message_window, 1000);
+
+                }
+
+</script>
 </head>
-<body>
+<body onload="update_message_window()">
+
+<h1>JavaScript Variables</h1>
+
+<p id="aaa"></p>
+
 </body>
+</html>
+
