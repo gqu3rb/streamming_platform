@@ -81,42 +81,54 @@
                         return;
                 }
 
-                //let last_message_update_time;
+                let last_message_update_time;
                 function update_message_window() {
                         const message_window_DOM = document.getElementById("message_window");
 
                         let request_content = "http://52.186.182.219:5000/get_chat?user_room="
                         request_content += chat_room_code;
-                        //request_content += "&past_time=";
-                        //request_content += last_message_update_time;
+                        request_content += "&past_time=";
+                        request_content += last_message_update_time;
                         const xhttp = new XMLHttpRequest();
                         xhttp.open("GET", request_content, true);
                         xhttp.send();
                         xhttp.onload = function() {
-                                if(xhttp.responseText != ""){
-                                        message_window_DOM.innerHTML +=
-                                                "<p>" +
-                                                xhttp.responseText + "<br>" +
-                                                "<span style=\"font-size:75%; color:gray\">" +
-                                                Date() +
-                                                "</span" +
-                                                "</p>";
+                                let new_messages = xhttp.responseText.split("\n");
+                                if(new_messages[0] != ""){
+                                        let new_message = "";
+                                        for(let ii=0; ii<new_messages.length; ii++) {
+                                                new_message = new_messages[ii].split(",");
+                                                message_window_DOM.innerHTML +=
+                                                        "<p>" +
+                                                        "<span style=\"color:blue; font-weight:bold\">" +
+                                                        new_message[0] +
+                                                        "</span>" +
+                                                        " says:" +
+                                                        "<br>" +
+                                                        new_message[1] +
+                                                        "<br>" +
+                                                        "<span style=\"font-size:75%; color:gray\">" +
+                                                        Date() +
+                                                        "</span>" +
+                                                        "</p>";
+                                        }
                                         message_window_DOM.scrollTop = document.getElementById("message_window").scrollHeight; // scroll to the bottom
                                 }
 
+                                let now_time = new Date();
+                                last_message_update_time = now_time.getFullYear();
+                                last_message_update_time += "-";
+                                last_message_update_time += now_time.getMonth();
+                                last_message_update_time += "-";
+                                last_message_update_time += now_time.getDate();
+                                last_message_update_time += " ";
+                                last_message_update_time += now_time.getHours();
+                                last_message_update_time += ":";
+                                last_message_update_time += now_time.getMinutes();
+                                last_message_update_time += ":";
+                                last_message_update_time += now_time.getSeconds();
+
                                 update_message_delay = setTimeout(update_message_window, 1000);
-                                //let now_time = Date();
-                                //last_message_update_time = now_time.getFullYear();
-                                //last_message_update_time += "-";
-                                //last_message_update_time += now_time.getMonth();
-                                //last_message_update_time += "-";
-                                //last_message_update_time += now_time.getDate();
-                                //last_message_update_time += " ";
-                                //last_message_update_time += now_time.getHours();
-                                //last_message_update_time += ":";
-                                //last_message_update_time += now_time.getMinutes();
-                                //last_message_update_time += ":";
-                                //last_message_update_time += now_time.getSeconds();
                         }
                 }
 
