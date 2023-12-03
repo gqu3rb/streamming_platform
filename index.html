@@ -7,10 +7,28 @@
 
         <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
         <script>
+		function update_message_window() {
+                        const message_window_DOM = document.getElementById("message_window");
+
+			const xhttp = new XMLHttpRequest();
+			xhttp.open("GET", "http://52.186.182.219:5000/get_user", true);
+			xhttp.send();
+			xhttp.onload = function() {
+			
+				message_window_DOM.innerHTML +=
+					"<p>" +
+					xhttp.responseText + "<br>" +
+					"<span style=\"font-size:75%; color:gray\">" +
+					Date() +
+					"</span" +
+					"</p>";
+				message_window_DOM.scrollTop = document.getElementById("message_window").scrollHeight; // scroll to the bottom
+			}
+		}
 
                 // getElementById cannot be used in the global field
                 // const message_window_DOM = document.getElementById("message_window");
-                function update_message_window() {
+                function send_message() {
                         const message_window_DOM = document.getElementById("message_window");
 
                         const new_message = document.getElementById("chatBox_input_bar").value;
@@ -18,15 +36,8 @@
                                 window.alert("The input bar is empty");
 
                         } else {
-                                message_window_DOM.innerHTML +=
-                                "<p>" +
-                                new_message + "<br>" +
-                                "<span style=\"font-size:75%; color:gray\">" +
-                                Date() +
-                                "</span" +
-                                "</p>";
-                                message_window_DOM.scrollTop = document.getElementById("message_window").scrollHeight; // scroll to the bottom
                                 document.getElementById("chatBox_input_bar").value = "";
+				update_message_window();
                         }
                 }
 
@@ -370,7 +381,7 @@
                         <div class=chatBox_input>
                                 Write something:<br>
                                 <input id="chatBox_input_bar", style="width:100%; line-height:1.5;">
-                                <button type="button" onclick="update_message_window()">send</button>
+                                <button type="button" onclick="send_message()">send</button>
                         </div>
                 </div>
 
