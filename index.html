@@ -65,9 +65,10 @@
                                                 chat_room_code = sent_room;
                                                 user_name_code = user_name_input_DOM.value;
                                                 redirect_delay = setTimeout(redirect_to_streamming, 3000);
+                                        } else if(xhttp.responseText == "No account exist") {
+                                                window.alert("No account exist.");
                                         } else {
-                                                window.alert("Login failed.");
-                                                location.reload();
+                                                window.alert("Wrong password.");
                                         }
 
                                 }
@@ -80,11 +81,17 @@
                         return;
                 }
 
+                //let last_message_update_time;
                 function update_message_window() {
                         const message_window_DOM = document.getElementById("message_window");
 
+                        let request_content = "http://52.186.182.219:5000/get_chat?user_room="
+                        request_content += chat_room_code;
+                        //request_content += "&past_time=";
+                        //request_content += last_message_update_time;
+                        window.alert(request_content);
                         const xhttp = new XMLHttpRequest();
-                        xhttp.open("GET", "http://52.186.182.219:5000/get_user?", true);
+                        xhttp.open("GET", request_content, true);
                         xhttp.send();
                         xhttp.onload = function() {
 
@@ -96,7 +103,19 @@
                                         "</span" +
                                         "</p>";
                                 message_window_DOM.scrollTop = document.getElementById("message_window").scrollHeight; // scroll to the bottom
-                                //redirect_delay = setTimeout(update_message_window, 100);
+                                redirect_delay = setTimeout(update_message_window, 1000);
+                                //let now_time = Date();
+                                //last_message_update_time = now_time.getFullYear();
+                                //last_message_update_time += "-";
+                                //last_message_update_time += now_time.getMonth();
+                                //last_message_update_time += "-";
+                                //last_message_update_time += now_time.getDate();
+                                //last_message_update_time += " ";
+                                //last_message_update_time += now_time.getHours();
+                                //last_message_update_time += ":";
+                                //last_message_update_time += now_time.getMinutes();
+                                //last_message_update_time += ":";
+                                //last_message_update_time += now_time.getSeconds();
                         }
                 }
 
@@ -122,7 +141,6 @@
                         xhttp.send(request_content);
                         xhttp.onload = function() {
                                 document.getElementById("chatBox_input_bar").value = "";
-                                update_message_window();
                         }
                 }
 
@@ -190,7 +208,6 @@
                         xhttp.send(request_content);
                         xhttp.onload = function() {
                                 alert_message = gift + " sent.";
-                                window.alert(alert_message);
                         }
                 }
 
@@ -465,7 +482,7 @@
                 </div>
                 <!-- slide bar: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_sidenav_push -->
                 <div class="chatBox">
-                        <div class=chatBox_message id="message_window">
+                        <div class=chatBox_message id="message_window" onload="update_message_window()">
                         </div>
                         <div class=chatBox_input>
                                 Write something:<br>
