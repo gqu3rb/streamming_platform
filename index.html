@@ -58,7 +58,6 @@
                                 const xhttp = new XMLHttpRequest();
                                 xhttp.open("GET", sent_content);
                                 xhttp.send();
-                                document.getElementById("request_sent").innerHTML = "\"" + sent_content +"\"";
                                 xhttp.onload = function() {
                                         if(xhttp.responseText == "Sign in successfully") {
                                                 window.alert("Login success.\nRedirect to the streamming page after 3 sec since you click \"OK\".");
