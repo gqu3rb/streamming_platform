@@ -10,7 +10,6 @@
                         // refer to: Reduce DOM Access
                         // https://www.w3schools.com/js/js_performance.asp
                         const user_name_input_DOM = document.getElementById("user_name_input");
-                        const user_email_input_DOM = document.getElementById("user_email_input");
                         const user_password_input_DOM = document.getElementById("user_password_input");
                         const user_room_input_DOM = document.getElementById("user_room_input");
 
@@ -20,11 +19,8 @@
                         } else if(user_password_input_DOM.value == "") {
                                 window.alert("user password cannot remain empty.");
 
-                        } else if(user_email_input_DOM.value.search("@") == -1) {
-                                window.alert("email should contain \'@\'");
-
                         } else {
-				let sent_room;
+                                let sent_room;
                                 if(user_room_input_DOM.value == "") { // create a new room
                                         for(let i=0; i<8; i++) {
                                                 sent_room += String.fromCharCode(Math.random()*(26) + 97);
@@ -45,32 +41,29 @@
                                         }
                                 }
 
-                                // send the post request
-                                const xhttp = new XMLHttpRequest();
-                                xhttp.open("POST", "http://52.186.182.219:5000/register", true);
-				xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-				//xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
-				//xhttp.setRequestHeader("Access-Control-Request", "POST");
+                                //xhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
+                                //xhttp.setRequestHeader("Access-Control-Request", "POST");
 
                                 // construct the post content
-                                let sent_content = "user_name=";
+                                let sent_content = "http://52.186.182.219:5000/signin?";
+                                sent_content += "user_name=";
                                 sent_content += user_name_input_DOM.value;
-                                sent_content += "&Email=";
-                                sent_content += user_email_input_DOM.value;
                                 sent_content += "&Password=";
                                 sent_content += user_password_input_DOM.value;
                                 sent_content += "&user_room=";
                                 sent_content += sent_room;
 
-                                xhttp.send(sent_content);
+                                // send the get request
+                                const xhttp = new XMLHttpRequest();
+                                xhttp.open("GET", sent_content);
+                                xhttp.send();
                                 document.getElementById("request_sent").innerHTML = "\"" + sent_content +"\"";
-
                                 xhttp.onload = function() {
+                                        document.getElementById("response_get").innerHTML = responseText;
                                         window.alert("Login success.\nRedirect to the streamming page after 3 sec since you click \"OK\".");
                                         redirect_delay = setTimeout(redirect_to_streamming, 3000);
                                 }
                         }
-
                 }
 
                 function redirect_to_streamming() {
@@ -93,7 +86,7 @@
                 }
 
                 .login {
-                        height: 45%;
+                        height: 35%;
                         border: 1px solid black;
                 }
 
@@ -122,10 +115,6 @@
                                 <input type="text" class="user_input" id="user_name_input" required>
                         </div>
                         <div>
-                                <label for="user_email">email</label>
-                                <input type="text" class="user_input" id="user_email_input" >
-                        </div>
-                        <div>
                                 <label for="user_password">password</label>
                                 <input type="password" class="user_input" id="user_password_input" >
                         </div>
@@ -135,12 +124,14 @@
                         </div>
                         <br>
                         <button type="button" class="login_button" onclick="login_action()">登入</button>
+                        <a href="http://52.186.182.219:5000/register">創建帳號</a>
                 </div>
 
         </div>
         <div>
                 <p>POST request content:</p>
                 <div id="request_sent"></div>
+                <div id="response_get"></div>
         </div>
 
 </body>
