@@ -89,21 +89,22 @@
                         request_content += chat_room_code;
                         //request_content += "&past_time=";
                         //request_content += last_message_update_time;
-                        window.alert(request_content);
                         const xhttp = new XMLHttpRequest();
                         xhttp.open("GET", request_content, true);
                         xhttp.send();
                         xhttp.onload = function() {
+                                if(xhttp.responseText != ""){
+                                        message_window_DOM.innerHTML +=
+                                                "<p>" +
+                                                xhttp.responseText + "<br>" +
+                                                "<span style=\"font-size:75%; color:gray\">" +
+                                                Date() +
+                                                "</span" +
+                                                "</p>";
+                                        message_window_DOM.scrollTop = document.getElementById("message_window").scrollHeight; // scroll to the bottom
+                                }
 
-                                message_window_DOM.innerHTML +=
-                                        "<p>" +
-                                        xhttp.responseText + "<br>" +
-                                        "<span style=\"font-size:75%; color:gray\">" +
-                                        Date() +
-                                        "</span" +
-                                        "</p>";
-                                message_window_DOM.scrollTop = document.getElementById("message_window").scrollHeight; // scroll to the bottom
-                                redirect_delay = setTimeout(update_message_window, 1000);
+                                update_message_delay = setTimeout(update_message_window, 1000);
                                 //let now_time = Date();
                                 //last_message_update_time = now_time.getFullYear();
                                 //last_message_update_time += "-";
@@ -388,7 +389,7 @@
         </style>
 
 </head>
-<body>
+<body onload="update_message_window()">
 
         <div class="total_container_login" id="total_container_login_id"  style="display:flex">
                 <div class="login">
@@ -482,7 +483,7 @@
                 </div>
                 <!-- slide bar: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_sidenav_push -->
                 <div class="chatBox">
-                        <div class=chatBox_message id="message_window" onload="update_message_window()">
+                        <div class=chatBox_message id="message_window" >
                         </div>
                         <div class=chatBox_input>
                                 Write something:<br>
