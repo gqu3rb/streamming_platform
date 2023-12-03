@@ -59,7 +59,7 @@
                                 xhttp.send();
                                 document.getElementById("request_sent").innerHTML = "\"" + sent_content +"\"";
                                 xhttp.onload = function() {
-                                        document.getElementById("response_get").innerHTML = responseText;
+                                        document.getElementById("response_get").innerHTML = xhttp.responseText;
                                         window.alert("Login success.\nRedirect to the streamming page after 3 sec since you click \"OK\".");
                                         redirect_delay = setTimeout(redirect_to_streamming, 3000);
                                 }
