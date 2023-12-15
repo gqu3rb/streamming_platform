@@ -258,7 +258,7 @@
 
                 function update_donate_rank_content() {
                         const donate_rank_content_DOM = document.getElementById("donate_rank_content");
-                        let request_content = "http://52.186.182.219:5000/get_donate?user_room="
+                        let request_content = "http://52.186.182.219:5000/get_rank?user_room="
                         request_content += chat_room_code;
 
                         const xhttp = new XMLHttpRequest();
@@ -277,6 +277,8 @@
                                 donate_rank_content_DOM.innerHTML += "ccc\t";
                                 donate_rank_content_DOM.innerHTML += "$250";
                         }
+
+                        window.alert(xhttp.responseText);
 
                         update_donate_rank_content_delay = setTimeout(update_donate_rank_content, 1000);
 
