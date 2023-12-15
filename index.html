@@ -267,18 +267,17 @@
 
                         xhttp.onload = function() {
                                 let donate_list = xhttp.responseText;
-                                donate_rank_content_DOM.innerHTML = "#1<br>";
-                                donate_rank_content_DOM.innerHTML += "aaa\t";
-                                donate_rank_content_DOM.innerHTML += "$1000";
-                                donate_rank_content_DOM.innerHTML += "<br>#2<br>";
-                                donate_rank_content_DOM.innerHTML += "bbb\t";
-                                donate_rank_content_DOM.innerHTML += "$500";
-                                donate_rank_content_DOM.innerHTML += "<br>#3<br>";
-                                donate_rank_content_DOM.innerHTML += "ccc\t";
-                                donate_rank_content_DOM.innerHTML += "$250";
+                                donate_rank_content_DOM.innerHTML = donate_list;
+                                //donate_rank_content_DOM.innerHTML = "#1<br>";
+                                //donate_rank_content_DOM.innerHTML += "aaa\t";
+                                //donate_rank_content_DOM.innerHTML += "$1000";
+                                //donate_rank_content_DOM.innerHTML += "<br>#2<br>";
+                                //donate_rank_content_DOM.innerHTML += "bbb\t";
+                                //donate_rank_content_DOM.innerHTML += "$500";
+                                //donate_rank_content_DOM.innerHTML += "<br>#3<br>";
+                                //donate_rank_content_DOM.innerHTML += "ccc\t";
+                                //donate_rank_content_DOM.innerHTML += "$250";
                         }
-
-                        window.alert(xhttp.responseText);
 
                         update_donate_rank_content_delay = setTimeout(update_donate_rank_content, 1000);
 
