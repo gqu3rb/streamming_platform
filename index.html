@@ -101,19 +101,32 @@
                                         let new_message = "";
                                         for(let ii=0; ii<new_messages.length; ii++) {
                                                 new_message = new_messages[ii].split(",");
-                                                message_window_DOM.innerHTML +=
-                                                        "<p>" +
-                                                        "<span style=\"color:blue; font-weight:bold\">" +
-                                                        new_message[0] +
-                                                        "</span>" +
-                                                        " says:" +
-                                                        "<br>" +
-                                                        new_message[1] +
-                                                        "<br>" +
-                                                        "<span style=\"font-size:75%; color:gray\">" +
-                                                        Date() +
-                                                        "</span>" +
-                                                        "</p>";
+                                                if(new_message.lastIndexOf("glftglft;") == -1) { // normal message
+                                                        message_window_DOM.innerHTML +=
+                                                                "<p>" +
+                                                                "<span style=\"color:blue; font-weight:bold\">" +
+                                                                new_message[0] +
+                                                                "</span>" +
+                                                                " says:" +
+                                                                "<br>" +
+                                                                new_message[1] +
+                                                                "<br>" +
+                                                                "<span style=\"font-size:75%; color:gray\">" +
+                                                                Date() +
+                                                                "</span>" +
+                                                                "</p>";
+                                                } else {
+                                                        message_window_DOM.innerHTML += "<p>" +
+
+                                                                "<span style=\"color:red; font-weight:bold\">" +
+                                                                new_message[0] +
+                                                                "DONATE a " +
+                                                                new_message[1].substring(new_message[1].lastIndexOf(";")+1) +
+                                                                "!!!" +
+                                                                "</span>" +
+                                                                "</p>";
+
+                                                }
                                         }
                                         message_window_DOM.scrollTop = document.getElementById("message_window").scrollHeight; // scroll to the bottom
                                 }
@@ -220,10 +233,22 @@
                                 request_content += "0";
                         }
 
-                        window.alert(request_content);
                         xhttp.send(request_content);
                         xhttp.onload = function() {
-                                alert_message = gift + " sent.";
+                        }
+
+                        xhttp.open("POST", "http://52.186.182.219:5000/add_chat", true);
+                        xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                        let request_content = "user_name=";
+                        request_content += user_name_code;
+                        request_content += "&user_room=";
+                        request_content += chat_room_code;
+                        request_content += "&Chat=";
+                        request_content += "glftglft;";
+                        request_content += gift;
+                        xhttp.send(request_content);
+
+                        xhttp.onload = function() {
                         }
                 }
 
@@ -433,7 +458,6 @@
                         top: 0;
                         right: 0;
                         width: 20%;
-                        height: 20%;
                         border: 0.5 solid green;
                         background-color: black;
                         color: white;
