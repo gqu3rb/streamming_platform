@@ -258,16 +258,25 @@
 
                 function update_donate_rank_content() {
                         const donate_rank_content_DOM = document.getElementById("donate_rank_content");
+                        let request_content = "http://52.186.182.219:5000/get_donate?user_room="
+                        request_content += chat_room_code;
 
-                        donate_rank_content_DOM.innerHTML = "#1<br>";
-                        donate_rank_content_DOM.innerHTML += "aaa\t";
-                        donate_rank_content_DOM.innerHTML += "$1000";
-                        donate_rank_content_DOM.innerHTML += "<br>#2<br>";
-                        donate_rank_content_DOM.innerHTML += "bbb\t";
-                        donate_rank_content_DOM.innerHTML += "$500";
-                        donate_rank_content_DOM.innerHTML += "<br>#3<br>";
-                        donate_rank_content_DOM.innerHTML += "ccc\t";
-                        donate_rank_content_DOM.innerHTML += "$250";
+                        const xhttp = new XMLHttpRequest();
+                        xhttp.open("GET", request_content, true);
+                        xhttp.send();
+
+                        xhttp.onload = function() {
+                                let donate_list = xhttp.responseText;
+                                donate_rank_content_DOM.innerHTML = "#1<br>";
+                                donate_rank_content_DOM.innerHTML += "aaa\t";
+                                donate_rank_content_DOM.innerHTML += "$1000";
+                                donate_rank_content_DOM.innerHTML += "<br>#2<br>";
+                                donate_rank_content_DOM.innerHTML += "bbb\t";
+                                donate_rank_content_DOM.innerHTML += "$500";
+                                donate_rank_content_DOM.innerHTML += "<br>#3<br>";
+                                donate_rank_content_DOM.innerHTML += "ccc\t";
+                                donate_rank_content_DOM.innerHTML += "$250";
+                        }
 
                         update_donate_rank_content_delay = setTimeout(update_donate_rank_content, 1000);
 
@@ -471,7 +480,7 @@
 
                 <script>
                         var video = document.getElementById('single_cam_mode');
-                        var videoSrc = '/hls/single_cam_mode.m3u8'; // 表示要播放的對象是 Streatest`的
+                        var videoSrc = '/hls/' + chatroom_code +'_single_cam_mode.m3u8'; // 表示要播放的對象是 Streatest`的
                         if (Hls.isSupported()) { // LS
                                 var hls = new Hls();
                                 hls.loadSource(videoSrc);
@@ -487,7 +496,7 @@
 
                  <video autoplay loop class='split_cam' id='split_cam_mode_1' style="display:none"></video>
                  <script style="display:none"> var video_l = document.getElementById('split_cam_mode_1');
-                         var videoSrc_l = '/hls/split_cam_mode_1.m3u8';
+                         var videoSrc_l = '/hls/' + chat_room_code + '_split_cam_mode_1.m3u8';
                         if (Hls.isSupported()) {
                                 var hls = new Hls();
                                 hls.loadSource(videoSrc_l);
@@ -503,7 +512,7 @@
                 <video autoplay loop class='split_cam' id='split_cam_mode_2' style="display:none"></video>
                 <script>
                         var video_r = document.getElementById('split_cam_mode_2');
-                        var videoSrc_r = '/hls/split_cam_mode_2.m3u8';
+                        var videoSrc_r = '/hls/' + chat_room_code + '_split_cam_mode_2.m3u8';
                         if (Hls.isSupported()) {
                                 var hls = new Hls();
                                 hls.loadSource(videoSrc_r);
@@ -520,7 +529,7 @@
                 <video autoplay loop class='portrait' id='teaching_mode' style="display:none"></video>
                 <script>
                         var video_r = document.getElementById('teaching_mode');
-                        var videoSrc_r = '/hls/teaching_mode.m3u8';
+                        var videoSrc_r = '/hls/' + chatroom_code + '_teaching_mode.m3u8';
                         if (Hls.isSupported()) {
                                 var hls = new Hls();
                                 hls.loadSource(videoSrc_r);
