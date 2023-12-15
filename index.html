@@ -120,7 +120,9 @@
 
                                                                 "<span style=\"color:red; font-weight:bold\">" +
                                                                 new_message[0] +
-                                                                "DONATE a " +
+                                                                "</span>" +
+                                                                "<span style=\"color:red;\">" +
+                                                                " DONATE a " +
                                                                 new_message[1].substring(new_message[1].lastIndexOf(";")+1) +
                                                                 "!!!" +
                                                                 "</span>" +
@@ -505,7 +507,8 @@
 
                 <script>
                         var video = document.getElementById('single_cam_mode');
-                        var videoSrc = '/hls/' + chatroom_code +'_single_cam_mode.m3u8'; // 表示要播放的對象是 Streatest`的
+                        //var videoSrc = '/hls/' + chatroom_code +'_single_cam_mode.m3u8'; // 表示要播放的對象是 Streatest`的
+                        var videoSrc = '/hls/_single_cam_mode.m3u8'; // 表示要播放的對象是 Streatest`的
                         if (Hls.isSupported()) { // LS
                                 var hls = new Hls();
                                 hls.loadSource(videoSrc);
