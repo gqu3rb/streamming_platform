@@ -101,7 +101,7 @@
                                         let new_message = "";
                                         for(let ii=0; ii<new_messages.length; ii++) {
                                                 new_message = new_messages[ii].split(",");
-                                                if(new_message.lastIndexOf("glftglft;") == -1) { // normal message
+                                                if(new_message[1].lastIndexOf("glftglft;") == -1) { // normal message
                                                         message_window_DOM.innerHTML +=
                                                                 "<p>" +
                                                                 "<span style=\"color:blue; font-weight:bold\">" +
