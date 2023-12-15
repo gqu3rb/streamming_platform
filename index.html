@@ -255,6 +255,23 @@
                         teaching_mode = this.value/100;
                 }
 
+
+                function update_donate_rank_content() {
+                        const donate_rank_content_DOM = document.getElementById("donate_rank_content");
+
+                        donate_rank_content_DOM.innerHTML = "#1<br>";
+                        donate_rank_content_DOM.innerHTML += "aaa\t";
+                        donate_rank_content_DOM.innerHTML += "$1000";
+                        donate_rank_content_DOM.innerHTML += "<br>#2<br>";
+                        donate_rank_content_DOM.innerHTML += "bbb\t";
+                        donate_rank_content_DOM.innerHTML += "$500";
+                        donate_rank_content_DOM.innerHTML += "<br>#3<br>";
+                        donate_rank_content_DOM.innerHTML += "ccc\t";
+                        donate_rank_content_DOM.innerHTML += "$250";
+
+                        update_donate_rank_content_delay = setTimeout(update_donate_rank_content, 1000);
+
+                }
         </script>
 
         <style>
@@ -401,12 +418,25 @@
                         display:inline-block; /* make multiple blocks be displayed in the same line */
                 }
 
+                .donate_rank {
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                        width: 20%;
+                        height: 20%;
+                        border: 0.5 solid green;
+                        background-color: black;
+                        color: white;
+                        overflow: auto;
+
+                }
+
         </style>
 
 </head>
-<body onload="update_message_window()">
+<body onload="update_message_window(); update_donate_rank_content();">
 
-        <div class="total_container_login" id="total_container_login_id"  style="display:flex">
+        <div class="total_container_login" id="total_container_login_id"  style="display:none">
                 <div class="login">
                         <div class="heading"><h3>登入</h3></div>
                         <div>
@@ -428,9 +458,17 @@
 
         </div>
 
-        <div class="total_container_streamming" id="total_container_streamming_id" style="display:none">
+        <div class="total_container_streamming" id="total_container_streamming_id" style="display:flex">
                 <div class="cam" id="cam_mode">
                 <video autoplay loop class="cam_video" id="single_cam_mode" style="display:block"></video>
+                <div class="donate_rank">
+                        <div>
+                                donate rank
+                        </div>
+                        <div id="donate_rank_content">
+                        </div>
+                </div>
+
                 <script>
                         var video = document.getElementById('single_cam_mode');
                         var videoSrc = '/hls/single_cam_mode.m3u8'; // 表示要播放的對象是 Streatest`的
