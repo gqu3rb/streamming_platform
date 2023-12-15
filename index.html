@@ -515,12 +515,11 @@
                         single_cam_mode_streamming();
                         function single_cam_mode_streamming() {
                                 var video = document.getElementById('single_cam_mode');
-                                //var videoSrc = '/hls/' + chatroom_code +'_single_cam_mode.m3u8'; // 表示要播放的對象是 Streatest`的
                                 var videoSrc = '/hls/' + get_chat_room_code() + '_single_cam_mode.m3u8'; // 表示要播放的對象是 Streatest`的
                                 if (Hls.isSupported()) { // LS
                                         var hls = new Hls();
                                         if(hls.loadSource(videoSrc) == null)
-                                                update_single_cam_mode = setTimeout(single_cam_mode_streamming, 10000);
+                                                update_single_cam_mode = setTimeout(single_cam_mode_streamming(), 10000);
                                         hls.attachMedia(video);
                                         hls.on(Hls.Events.MANIFEST_PARSED, function() {
                                                 video.muted = false;
@@ -535,52 +534,67 @@
 
                  <video autoplay loop class='split_cam' id='split_cam_mode_1' style="display:none"></video>
                  <script style="display:none">
-                         var video_l = document.getElementById('split_cam_mode_1');
-                         var videoSrc_l = '/hls/' + get_chat_room_code() + '_split_cam_mode_1.m3u8';
-                        if (Hls.isSupported()) {
-                                var hls = new Hls();
-                                hls.loadSource(videoSrc_l);
-                                hls.attachMedia(video_l);
-                                hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                                        video_l.muted = false;
-                                        video_l.play();
-                                });
-                        } else if (video_l.canPlayType('application/vnd.apple.mpegurl')) {
-                                video_l.src = videoSrc_l;
-                        }
+                         split_cam_mode_1_streamming();
+                         function split_cam_mode_1_streamming() {
+                                 var video_l = document.getElementById('split_cam_mode_1');
+                                 var videoSrc_l = '/hls/' + get_chat_room_code() + '_split_cam_mode_1.m3u8';
+                                if (Hls.isSupported()) {
+                                        var hls = new Hls();
+                                        if(hls.loadSource(videoSrc) == null)
+                                                update_single_cam_mode = setTimeout(split_cam_mode_1_streamming(), 10000);
+                                        hls.loadSource(videoSrc_l);
+                                        hls.attachMedia(video_l);
+                                        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                                                video_l.muted = false;
+                                                video_l.play();
+                                        });
+                                } else if (video_l.canPlayType('application/vnd.apple.mpegurl')) {
+                                        video_l.src = videoSrc_l;
+                                }
+                         }
                 </script>
                 <video autoplay loop class='split_cam' id='split_cam_mode_2' style="display:none"></video>
                 <script>
-                        var video_r = document.getElementById('split_cam_mode_2');
-                        var videoSrc_r = '/hls/' + get_chat_room_code() + '_split_cam_mode_2.m3u8';
-                        if (Hls.isSupported()) {
-                                var hls = new Hls();
-                                hls.loadSource(videoSrc_r);
-                                hls.attachMedia(video_r);
-                                hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                                        video_r.muted = false;
-                                        video_r.play();
-                                });
-                        } else if (video_r.canPlayType('application/vnd.apple.mpegurl')) {
-                                video_r.src = videoSrc_r;
-                        }
+                         split_cam_mode_2_streamming();
+                         function split_cam_mode_2_streamming() {
+                                 var video_l = document.getElementById('split_cam_mode_2');
+                                 var videoSrc_l = '/hls/' + get_chat_room_code() + '_split_cam_mode_2.m3u8';
+                                if (Hls.isSupported()) {
+                                        var hls = new Hls();
+                                        if(hls.loadSource(videoSrc) == null)
+                                                update_single_cam_mode = setTimeout(split_cam_mode_2_streamming(), 10000);
+                                        hls.loadSource(videoSrc_l);
+                                        hls.attachMedia(video_l);
+                                        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                                                video_l.muted = false;
+                                                video_l.play();
+                                        });
+                                } else if (video_l.canPlayType('application/vnd.apple.mpegurl')) {
+                                        video_l.src = videoSrc_l;
+                                }
+                         }
                 </script>
 
                 <video autoplay loop class='portrait' id='teaching_mode' style="display:none"></video>
                 <script>
-                        var video_r = document.getElementById('teaching_mode');
-                        var videoSrc_r = '/hls/' + get_chat_room_code() + '_teaching_mode.m3u8';
-                        if (Hls.isSupported()) {
-                                var hls = new Hls();
-                                hls.loadSource(videoSrc_r);
-                                hls.attachMedia(video_r);
-                                hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                                        video_r.muted = false;
-                                        video_r.play();
-                                });
-                        } else if (video_r.canPlayType('application/vnd.apple.mpegurl')) {
-                                video_r.src = videoSrc_r;
-                        }
+                         teaching_mode_streamming();
+                         function teaching_mode_streamming() {
+                                 var video_l = document.getElementById('teaching_mode');
+                                 var videoSrc_l = '/hls/' + get_chat_room_code() + '_teaching_mode.m3u8';
+                                if (Hls.isSupported()) {
+                                        var hls = new Hls();
+                                        if(hls.loadSource(videoSrc) == null)
+                                                update_single_cam_mode = setTimeout(teaching_mode_streamming(), 10000);
+                                        hls.loadSource(videoSrc_l);
+                                        hls.attachMedia(video_l);
+                                        hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                                                video_l.muted = false;
+                                                video_l.play();
+                                        });
+                                } else if (video_l.canPlayType('application/vnd.apple.mpegurl')) {
+                                        video_l.src = videoSrc_l;
+                                }
+                         }
                 </script>
                 </div>
                 <!-- slide bar: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_sidenav_push -->
