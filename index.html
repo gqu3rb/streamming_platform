@@ -519,7 +519,7 @@
                                 if (Hls.isSupported()) { // LS
                                         var hls = new Hls();
                                         if(hls.loadSource(videoSrc) == null)
-                                                update_single_cam_mode = setTimeout(single_cam_mode_streamming(), 10000);
+                                                update_single_cam_mode = setTimeout(single_cam_mode_streamming, 10000);
                                         hls.attachMedia(video);
                                         hls.on(Hls.Events.MANIFEST_PARSED, function() {
                                                 video.muted = false;
@@ -541,7 +541,7 @@
                                 if (Hls.isSupported()) {
                                         var hls = new Hls();
                                         if(hls.loadSource(videoSrc) == null)
-                                                update_single_cam_mode = setTimeout(split_cam_mode_1_streamming(), 10000);
+                                                update_single_cam_mode = setTimeout(split_cam_mode_1_streamming, 10000);
                                         hls.loadSource(videoSrc_l);
                                         hls.attachMedia(video_l);
                                         hls.on(Hls.Events.MANIFEST_PARSED, function() {
@@ -562,7 +562,7 @@
                                 if (Hls.isSupported()) {
                                         var hls = new Hls();
                                         if(hls.loadSource(videoSrc) == null)
-                                                update_single_cam_mode = setTimeout(split_cam_mode_2_streamming(), 10000);
+                                                update_single_cam_mode = setTimeout(split_cam_mode_2_streamming, 10000);
                                         hls.loadSource(videoSrc_l);
                                         hls.attachMedia(video_l);
                                         hls.on(Hls.Events.MANIFEST_PARSED, function() {
@@ -584,7 +584,7 @@
                                 if (Hls.isSupported()) {
                                         var hls = new Hls();
                                         if(hls.loadSource(videoSrc) == null)
-                                                update_single_cam_mode = setTimeout(teaching_mode_streamming(), 10000);
+                                                update_single_cam_mode = setTimeout(teaching_mode_streamming, 10000);
                                         hls.loadSource(videoSrc_l);
                                         hls.attachMedia(video_l);
                                         hls.on(Hls.Events.MANIFEST_PARSED, function() {
