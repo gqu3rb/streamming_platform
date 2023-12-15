@@ -313,6 +313,26 @@
                         update_donate_rank_content_delay = setTimeout(update_donate_rank_content, 1000);
 
                 }
+
+
+                function single_cam_mode_streamming() {
+                        var video = document.getElementById('single_cam_mode');
+                        //var videoSrc = '/hls/' + chatroom_code +'_single_cam_mode.m3u8'; // 表示要播放的對象是 Streatest`的
+                        var videoSrc = '/hls/' + get_chat_room_code() + '_single_cam_mode.m3u8'; // 表示要播放的對象是 Streatest`的
+                        if (Hls.isSupported()) { // LS
+                                var hls = new Hls();
+                                hls.loadSource(videoSrc);
+                                hls.attachMedia(video);
+                                hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                                        video.muted = false;
+                                        video.play();
+                                });
+                        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                                video.src = videoSrc;
+                        }
+
+                        update_single_cam_mode = setTimeout(single_cam_mode_streamming, 10000);
+                }
         </script>
 
         <style>
@@ -510,20 +530,7 @@
                 </div>
 
                 <script>
-                        var video = document.getElementById('single_cam_mode');
-                        //var videoSrc = '/hls/' + chatroom_code +'_single_cam_mode.m3u8'; // 表示要播放的對象是 Streatest`的
-                        var videoSrc = '/hls/' + get_chat_room_code() + '_single_cam_mode.m3u8'; // 表示要播放的對象是 Streatest`的
-                        if (Hls.isSupported()) { // LS
-                                var hls = new Hls();
-                                hls.loadSource(videoSrc);
-                                hls.attachMedia(video);
-                                hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                                        video.muted = false;
-                                        video.play();
-                                });
-                        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                                video.src = videoSrc;
-                        }
+                        single_cam_mode_streamming();
                 </script>
 
                  <video autoplay loop class='split_cam' id='split_cam_mode_1' style="display:none"></video>
