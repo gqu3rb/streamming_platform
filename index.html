@@ -537,7 +537,7 @@
                 </script>
 
                  <video autoplay loop class='split_cam' id='split_cam_mode_1' style="display:none"></video>
-                 <script style="display:none">
+                 <script>
                          split_cam_mode_1_streamming();
                         split_cam_mode_1_connected = 0;
                          function split_cam_mode_1_streamming() {
@@ -545,12 +545,11 @@
                                  var videoSrc_l = '/hls/' + get_chat_room_code() + '_split_cam_mode_1.m3u8';
                                 if (Hls.isSupported()) {
                                         var hls = new Hls();
-                                        if(hls.loadSource(videoSrc) == null && split_cam_mode_1_connected == 0) {
-                                                update_single_cam_mode = setTimeout(split_cam_mode_1_streamming, 10000);
+                                        if(hls.loadSource(videoSrc_l) == null && split_cam_mode_1_connected == 0) {
+                                                update_split_cam_mode_1 = setTimeout(split_cam_mode_1_streamming, 10000);
                                         } else {
                                                 split_cam_mode_1_connected = 1;
                                         }
-                                        hls.loadSource(videoSrc_l);
                                         hls.attachMedia(video_l);
                                         hls.on(Hls.Events.MANIFEST_PARSED, function() {
                                                 video_l.muted = false;
@@ -566,23 +565,22 @@
                         split_cam_mode_2_streamming();
                         split_cam_mode_2_connected = 0;
                          function split_cam_mode_2_streamming() {
-                                 var video_l = document.getElementById('split_cam_mode_2');
-                                 var videoSrc_l = '/hls/' + get_chat_room_code() + '_split_cam_mode_2.m3u8';
+                                 var video_r = document.getElementById('split_cam_mode_2');
+                                 var videoSrc_r = '/hls/' + get_chat_room_code() + '_split_cam_mode_2.m3u8';
                                 if (Hls.isSupported()) {
                                         var hls = new Hls();
-                                        if(hls.loadSource(videoSrc) == null && split_cam_mode_2_connected == 0) {
-                                                update_single_cam_mode = setTimeout(split_cam_mode_2_streamming, 10000);
+                                        if(hls.loadSource(videoSrc_r) == null && split_cam_mode_2_connected == 0) {
+                                                update_split_cam_mode_2 = setTimeout(split_cam_mode_2_streamming, 10000);
                                         } else {
                                                 split_cam_mode_2_connected = 1;
                                         }
-                                        hls.loadSource(videoSrc_l);
-                                        hls.attachMedia(video_l);
+                                        hls.attachMedia(video_r);
                                         hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                                                video_l.muted = false;
-                                                video_l.play();
+                                                video_r.muted = false;
+                                                video_r.play();
                                         });
-                                } else if (video_l.canPlayType('application/vnd.apple.mpegurl')) {
-                                        video_l.src = videoSrc_l;
+                                } else if (video_r.canPlayType('application/vnd.apple.mpegurl')) {
+                                        video_r.src = videoSrc_r;
                                 }
                          }
                 </script>
@@ -592,25 +590,24 @@
                          teaching_mode_streamming();
                          teaching_mode_connected = 0;
                          function teaching_mode_streamming() {
-                                 var video_l = document.getElementById('teaching_mode');
-                                 var videoSrc_l = '/hls/' + get_chat_room_code() + '_teaching_mode.m3u8';
+                                 var vedio_t = document.getElementById('teaching_mode');
+                                 var videoSrc_t = '/hls/' + get_chat_room_code() + '_teaching_mode.m3u8';
                                 if (Hls.isSupported()) {
                                         var hls = new Hls();
-                                        if(hls.loadSource(videoSrc) == null && teaching_mode_connected == 0) {
+                                        if(hls.loadSource(videoSrc_t) == null && teaching_mode_connected == 0) {
 
-                                                update_single_cam_mode = setTimeout(teaching_mode_streamming, 10000);
+                                                update_teaching_cam_mode = setTimeout(teaching_mode_streamming, 10000);
                                         }
                                         else {
                                                 teaching_mode_connected = 1;
                                         }
-                                        hls.loadSource(videoSrc_l);
-                                        hls.attachMedia(video_l);
+                                        hls.attachMedia(vedio_t);
                                         hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                                                video_l.muted = false;
-                                                video_l.play();
+                                                vedio_t.muted = false;
+                                                vedio_t.play();
                                         });
-                                } else if (video_l.canPlayType('application/vnd.apple.mpegurl')) {
-                                        video_l.src = videoSrc_l;
+                                } else if (vedio_t.canPlayType('application/vnd.apple.mpegurl')) {
+                                        vedio_t.src = videoSrc_t;
                                 }
                          }
                 </script>
