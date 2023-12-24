@@ -538,8 +538,8 @@
 
                  <video autoplay loop class='split_cam' id='split_cam_mode_1' style="display:none"></video>
                  <script>
+                         split_cam_mode_1_connected = 0;
                          split_cam_mode_1_streamming();
-                        split_cam_mode_1_connected = 0;
                          function split_cam_mode_1_streamming() {
                                  var video_l = document.getElementById('split_cam_mode_1');
                                  var videoSrc_l = '/hls/' + get_chat_room_code() + '_split_cam_mode_1.m3u8';
@@ -562,8 +562,8 @@
                 </script>
                 <video autoplay loop class='split_cam' id='split_cam_mode_2' style="display:none"></video>
                 <script>
-                        split_cam_mode_2_streamming();
                         split_cam_mode_2_connected = 0;
+                        split_cam_mode_2_streamming();
                          function split_cam_mode_2_streamming() {
                                  var video_r = document.getElementById('split_cam_mode_2');
                                  var videoSrc_r = '/hls/' + get_chat_room_code() + '_split_cam_mode_2.m3u8';
@@ -587,8 +587,8 @@
 
                 <video autoplay loop class='portrait' id='teaching_mode' style="display:none"></video>
                 <script>
-                         teaching_mode_streamming();
                          teaching_mode_connected = 0;
+                         teaching_mode_streamming();
                          function teaching_mode_streamming() {
                                  var vedio_t = document.getElementById('teaching_mode');
                                  var videoSrc_t = '/hls/' + get_chat_room_code() + '_teaching_mode.m3u8';
