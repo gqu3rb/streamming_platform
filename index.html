@@ -85,6 +85,7 @@
                 function redirect_to_streamming() {
                         document.getElementById("total_container_login_id").style.display = "none";
                         document.getElementById("total_container_streamming_id").style.display = "flex";
+                        document.getElementById("cam_mode_display_js").style.display = "block";
                         return;
                 }
 
@@ -184,37 +185,48 @@
                 function change_mode() {
                         switch(mode) {
                                 case 0: { //single mode => change into twin mode.
-                                        document.getElementById("single_cam_mode").style.display = "none";
+                                        document.getElementById("cam_mode_display_js").style.display = "none";
                                         document.getElementById("split_cam_mode_1").style.display = "block";
                                         document.getElementById("split_cam_mode_2").style.display = "block";
                                         document.getElementById("teaching_mode").style.display = "none";
                                         mode = 1;
+                                        document.getElementById("cam_mode_display_js").style.display = "block";
+                                        document.getElementById("cam_mode_display_js").innerHTML = "Mode: Twin";
                                         break;
                                 }
                                 case 1: { //twin mode => change into teaching mode.
+                                        document.getElementById("cam_mode_display_js").style.display = "none";
                                         document.getElementById("single_cam_mode").style.display = "block";
                                         document.getElementById("split_cam_mode_1").style.display = "none";
                                         document.getElementById("split_cam_mode_2").style.display = "none";
                                         document.getElementById("teaching_mode").style.display = "block";
                                         mode = 2;
+                                        document.getElementById("cam_mode_display_js").style.display = "block";
+                                        document.getElementById("cam_mode_display_js").innerHTML = "Mode: Teaching";
                                         break;
                                 }
                                 case 2: { //teaching mode => change into single mode.
+                                        document.getElementById("single_cam_mode").style.display = "none";
                                         document.getElementById("single_cam_mode").style.display = "block";
                                         document.getElementById("split_cam_mode_1").style.display = "none";
                                         document.getElementById("split_cam_mode_2").style.display = "none";
                                         document.getElementById("teaching_mode").style.display = "none";
-
                                         mode = 0;
+                                        document.getElementById("cam_mode_display_js").style.display = "block";
+                                        document.getElementById("cam_mode_display_js").innerHTML = "Mode: Single";
                                         break;
                                 }
                                 default: { // exception => change into single mode.
                                         window.alert("change into single mode");
+                                        document.getElementById("single_cam_mode").style.display = "none";
                                         document.getElementById("single_cam_mode").style.display = "block";
                                         document.getElementById("split_cam_mode_1").style.display = "none";
                                         document.getElementById("split_cam_mode_2").style.display = "none";
                                         document.getElementById("teaching_mode").style.display = "none";
                                         mode = 0;
+                                        document.getElementById("cam_mode_display_js").style.display = "block";
+                                        document.getElementById("cam_mode_display_js").style.display = "block";
+                                        document.getElementById("cam_mode_display_js").innerHTML = "Mode: Single";
                                         break;
                                 }
                         }
@@ -473,12 +485,22 @@
 
                 }
 
+                .cam_mode_display {
+                        display: none;
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        background-color: green;
+                        color: white;
+                        width: 10%;
+                }
+
         </style>
 
 </head>
 <body onload="update_message_window(); update_donate_rank_content();">
 
-        <div class="total_container_login" id="total_container_login_id"  style="display:flex">
+        <div class="total_container_login" id="total_container_login_id"  style="display:none">
                 <div class="login">
                         <div class="heading"><h3>登入</h3></div>
                         <div>
@@ -500,8 +522,9 @@
 
         </div>
 
-        <div class="total_container_streamming" id="total_container_streamming_id" style="display:none">
+        <div class="total_container_streamming" id="total_container_streamming_id" style="display:flex">
                 <div class="cam" id="cam_mode">
+                <div class="cam_mode_display" id="cam_mode_display_js">Mode: Teaching</div>
                 <video autoplay loop class="cam_video" id="single_cam_mode" style="display:block"></video>
                 <div class="donate_rank">
                         <div>
