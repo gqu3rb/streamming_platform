@@ -186,6 +186,7 @@
                         switch(mode) {
                                 case 0: { //single mode => change into twin mode.
                                         document.getElementById("cam_mode_display_js").style.display = "none";
+                                        document.getElementById("single_cam_mode").style.display = "none";
                                         document.getElementById("split_cam_mode_1").style.display = "block";
                                         document.getElementById("split_cam_mode_2").style.display = "block";
                                         document.getElementById("teaching_mode").style.display = "none";
@@ -525,16 +526,7 @@
 
         <div class="total_container_streamming" id="total_container_streamming_id" style="display:none">
                 <div class="cam" id="cam_mode">
-                <div class="cam_mode_display" id="cam_mode_display_js">Mode: Single</div>
                 <video autoplay loop class="cam_video" id="single_cam_mode" style="display:block"></video>
-                <div class="donate_rank">
-                        <div>
-                                donate rank
-                        </div>
-                        <div id="donate_rank_content">
-                        </div>
-                </div>
-
                 <script>
                         single_cam_mode_connected = 0;
                         single_cam_mode_streamming();
@@ -635,6 +627,15 @@
                                 }
                          }
                 </script>
+                <div class="donate_rank">
+                        <div>
+                                donate rank
+                        </div>
+                        <div id="donate_rank_content">
+                        </div>
+                </div>
+                <div class="cam_mode_display" id="cam_mode_display_js">Mode: Single</div>
+
                 </div>
                 <!-- slide bar: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_js_sidenav_push -->
                 <div class="chatBox">
